@@ -1,0 +1,119 @@
+{
+  "entities": {
+    "User": {
+      "title": "User",
+      "description": "User profile with rewards balance and referral info",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "displayName": { "type": "string" },
+        "email": { "type": "string" },
+        "referralCode": { "type": "string" },
+        "referredBy": { "type": "string" },
+        "coinBalance": { "type": "integer" },
+        "lifetimeCoins": { "type": "integer" },
+        "dailyStreak": { "type": "integer" },
+        "lastCheckInDate": { "type": "string" },
+        "isAdmin": { "type": "boolean" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["userId", "displayName", "email", "coinBalance"]
+    },
+    "Offer": {
+      "title": "Offer",
+      "description": "Rewarded tasks and offers available to users",
+      "type": "object",
+      "properties": {
+        "offerId": { "type": "string" },
+        "title": { "type": "string" },
+        "description": { "type": "string" },
+        "category": { "type": "string" },
+        "rewardCoins": { "type": "integer" },
+        "instructions": { "type": "string" },
+        "destinationUrl": { "type": "string" },
+        "status": { "type": "string", "enum": ["active", "paused"] },
+        "proofRequirement": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["title", "rewardCoins", "category", "status"]
+    },
+    "Submission": {
+      "title": "Submission",
+      "description": "User task completion proofs for review",
+      "type": "object",
+      "properties": {
+        "submissionId": { "type": "string" },
+        "userId": { "type": "string" },
+        "userEmail": { "type": "string" },
+        "offerId": { "type": "string" },
+        "offerTitle": { "type": "string" },
+        "rewardCoins": { "type": "integer" },
+        "proofDetails": { "type": "string" },
+        "proofImageUrl": { "type": "string" },
+        "status": { "type": "string", "enum": ["pending", "approved", "rejected"] },
+        "adminFeedback": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["userId", "offerId", "offerTitle", "rewardCoins", "status"]
+    },
+    "Withdrawal": {
+      "title": "Withdrawal",
+      "description": "Demo cashout / withdrawal requests",
+      "type": "object",
+      "properties": {
+        "withdrawalId": { "type": "string" },
+        "userId": { "type": "string" },
+        "userEmail": { "type": "string" },
+        "amountRupees": { "type": "integer" },
+        "coinsDebited": { "type": "integer" },
+        "payoutMethod": { "type": "string" },
+        "payoutAddress": { "type": "string" },
+        "status": { "type": "string", "enum": ["pending", "approved", "rejected"] },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["userId", "amountRupees", "coinsDebited", "payoutMethod", "status"]
+    },
+    "Transaction": {
+      "title": "Transaction",
+      "description": "Ledger of coin earning and redemption transactions",
+      "type": "object",
+      "properties": {
+        "transactionId": { "type": "string" },
+        "userId": { "type": "string" },
+        "type": { "type": "string", "enum": ["earn", "redeem", "checkin", "referral"] },
+        "title": { "type": "string" },
+        "coins": { "type": "integer" },
+        "rupees": { "type": "number" },
+        "status": { "type": "string", "enum": ["completed", "pending", "rejected"] },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["userId", "type", "title", "coins", "status"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": "User",
+      "description": "User profiles and rewards balance"
+    },
+    "/offers/{offerId}": {
+      "schema": "Offer",
+      "description": "Available earning tasks and offers"
+    },
+    "/submissions/{submissionId}": {
+      "schema": "Submission",
+      "description": "User offer completion submissions and reviews"
+    },
+    "/withdrawals/{withdrawalId}": {
+      "schema": "Withdrawal",
+      "description": "Cashout requests"
+    },
+    "/transactions/{transactionId}": {
+      "schema": "Transaction",
+      "description": "Auditable transaction ledger for rewards and cashouts"
+    }
+  }
+}
